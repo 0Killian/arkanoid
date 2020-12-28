@@ -24,6 +24,7 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+#include "Rect.h"
 
 class Graphics
 {
@@ -57,6 +58,13 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	template <typename T>
+	void DrawRect(const Rect<T>& rect, const Color c)
+	{
+		for (int x = (int)rect.pos.x; x < rect.pos.x + rect.w; x++)
+			for (int y = (int)rect.pos.y; y < rect.pos.y + rect.h; y++)
+				PutPixel(x, y, c);
+	}
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

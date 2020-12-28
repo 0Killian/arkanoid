@@ -42,5 +42,8 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	Rectf r1;
+	Rectf r2;
+	static constexpr float speed = 1.0f;
 	/********************************/
 };

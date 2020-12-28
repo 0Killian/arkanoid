@@ -24,7 +24,9 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	r1(Vec2f(30.0f, 30.0f), 100.0f, 100.0f),
+	r2(Vec2f(60.0f, 60.0f), Vec2f(40.0f, 40.0f))
 {
 }
 
@@ -38,8 +40,11 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	r1.pos += speed;
 }
 
 void Game::ComposeFrame()
 {
+	gfx.DrawRect(r1, Colors::Green);
+	gfx.DrawRect(r2, Colors::Blue);
 }
