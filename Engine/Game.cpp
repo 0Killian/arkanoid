@@ -24,10 +24,18 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd ),
-	r1(Vec2f(30.0f, 30.0f), 100.0f, 100.0f),
-	r2(Vec2f(60.0f, 60.0f), Vec2f(40.0f, 40.0f))
+	gfx( wnd )
 {
+	std::random_device rd;
+	std::mt19937 rng(rd());
+	std::uniform_int_distribution<int> cDist(0, sizeof(colors) / sizeof(Color) - 1);
+
+	for (int y = 0; y < nBricksX; y++)
+	{
+		bricks.push_back(std::vector<Brick>());
+		for (int x = 0; x < nBricksY; x++)
+			bricks[y].push_back(Brick(Vec2i(x * Brick::width, y * Brick::height), colors[cDist(rng)]));
+	}
 }
 
 void Game::Go()
@@ -40,11 +48,44 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	r1.pos += speed;
+	if (wnd.mouse.LeftIsPressed())
+	{
+		if (bricks.size() != 0 && !old)
+		{
+			std::random_device rd;
+			std::mt19937 rng(rd());
+			std::uniform_int_distribution<int> yDist(0, (int)bricks.size() - 1);
+			std::vector<Brick>::iterator b;
+
+			int y;
+
+			do
+			{
+				y = yDist(rng);
+			} while (bricks[y].size() == 0);
+
+			std::uniform_int_distribution<int> xDist(0, (int)bricks[y].size() - 1);
+
+			do
+			{
+				const int x = xDist(rng);
+				b = std::find(bricks[y].begin(), bricks[y].end(), bricks[y][x]);
+			} while (b == bricks[y].end());
+
+			bricks[y].erase(b);
+			if (bricks[y].size() == 0)
+				bricks.erase(bricks.begin() + y);
+		}
+
+		old = true;
+	}
+	else
+		old = false;
 }
 
 void Game::ComposeFrame()
 {
-	gfx.DrawRect(r1, Colors::Green);
-	gfx.DrawRect(r2, Colors::Blue);
+	for (const std::vector<Brick>& vec : bricks)
+		for (const Brick& b : vec)
+			b.Draw(gfx);
 }

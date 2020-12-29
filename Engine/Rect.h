@@ -48,6 +48,12 @@ public:
 	Vec2<T> pos;
 	T w;
 	T h;
+
+	bool operator==(const Rect<T>& rhs)
+	{
+		return pos == rhs.pos && w == rhs.w && h == rhs.h;
+	}
 };
 
 typedef Rect<float> Rectf;
+typedef Rect<int> Recti;

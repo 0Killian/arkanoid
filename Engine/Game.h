@@ -23,6 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "Brick.h"
+#include <random>
 
 class Game
 {
@@ -42,8 +44,18 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	Rectf r1;
-	Rectf r2;
-	static constexpr float speed = 1.0f;
+	static constexpr int nBricksY = Graphics::ScreenWidth / Brick::width;
+	static constexpr int nBricksX = 5;
+	std::vector<std::vector<Brick>> bricks;
+
+	static constexpr Color colors[5] = {
+		Colors::Cyan,
+		Colors::Green,
+		Colors::Red,
+		Colors::Yellow,
+		Colors::Blue
+	};
+
+	bool old = false;
 	/********************************/
 };
